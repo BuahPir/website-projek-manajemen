@@ -25,6 +25,8 @@ Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
 // Optional: Route to view the list of teams if needed
 Route::get('/teams', [TeamController::class, 'index'])->name('teams');
 
+Route::delete('/teams/{id}', [TeamController::class, 'destroy'])->name('teams.destroy');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

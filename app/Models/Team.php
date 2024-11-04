@@ -10,8 +10,15 @@ class Team extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'leader_id',
+    ];
 
+    public function leader()
+    {
+        return $this->belongsTo(User::class, 'leader_id');
+    }
     // Define the relationship with User
     public function users()
     {

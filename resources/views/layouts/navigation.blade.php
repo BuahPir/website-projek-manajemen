@@ -4,11 +4,12 @@
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-        <div class="flex h-16 shrink-0 items-center">
-            <a href="{{route ('dashboard')}}">
-                <x-application-logo class="w-10 h-auto"/>
-            </a>
-        </div>
+            <div class="flex h-16 shrink-0 items-center space-x-2">
+                <a href="{{route ('dashboard')}}" class="flex items-center space-x-2">
+                    <x-application-logo class="w-10 h-auto"/>
+                    <span class="text-lg font-semibold text-gray-800">ProSync</span>
+                </a>
+            </div>
         <nav class="flex flex-1 flex-col">
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
             <li>
@@ -67,27 +68,19 @@
             </li>
             <li>
                 <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-                <ul role="list" class="-mx-2 mt-2 space-y-1">
-                <li>
-                    <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">H</span>
-                    <span class="truncate">Heroicons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">T</span>
-                    <span class="truncate">Tailwind Labs</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">W</span>
-                    <span class="truncate">Workcation</span>
-                    </a>
-                </li>
-                </ul>
+                @foreach($userTeams as $team)
+                    @foreach($team->users as $user)
+                        <ul role="list" class="-mx-2 mt-2 space-y-1">
+                        <li>
+                            <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                            <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                            <img src="{{ $user->picture ? asset('pictures/' . $user->picture) : asset('img/person-fill.svg') }}" alt="{{ $user->name }}" class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white group-hover:border-indigo-600 ">
+                            <span class="truncate">{{ $user->name }}</span>
+                            </a>
+                        </li>
+                        </ul>
+                    @endforeach
+                @endforeach
             </li>
             <li class="-mx-6 mt-auto">
                 <x-dropdown align="left" width="48">
@@ -150,12 +143,6 @@
         @endif
         </a>
     </div>
-
-    <main class="py-10 lg:pl-72">
-        <div class="px-4 sm:px-6 lg:px-8">
-        <!-- Your content -->
-        </div>
-    </main>
     </div>
 </div>
 

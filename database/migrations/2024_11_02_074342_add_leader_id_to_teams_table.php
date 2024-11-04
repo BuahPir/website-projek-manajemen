@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('teams', function (Blueprint $table) {
             //
-            $table->foreignId('team_id')->nullable()->constrained('teams')->onDelete('cascade');
+            $table->foreignId('leader_id')->constrained('users')->onDelete('cascade'); // Leader ID references the users table
         });
     }
 
@@ -22,10 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('teams', function (Blueprint $table) {
             //
-            $table->dropForeign(['team_id']);
-            $table->dropColumn('team_id');
         });
     }
 };
