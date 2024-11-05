@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Auth;
 class TeamController extends Controller
 {
     // Display the form for creating a new team
-    public function create()
-    {
-        $users = User::doesntHave('team')->get(); // Retrieve all users for the dropdown
-        return view('create_teams', compact('users')); // Return the view with users data
-    }
-
     // Store the newly created team and associate selected users
     public function store(Request $request)
     {
@@ -34,7 +28,7 @@ class TeamController extends Controller
         }
 
         // Check if any selected user is already in a team
-        $existingTeamMembers = User::whereIn('id', $request->input('selected_users'))
+        $existingTeamMembers = User::whereIn('id', $request->input('selected_users', []))
                                    ->whereNotNull('team_id')
                                    ->get();
 
@@ -56,18 +50,18 @@ class TeamController extends Controller
         $leader->save();
 
         // Attach selected users to the team
-        if ($request->has('selected_users')) {
-            foreach ($request->input('selected_users') as $userId) {
-                $user = User::find($userId);
-                if ($user) {
-                    $user->team_id = $team->id;
-                    $user->save();
-                }
+        $selectedUsers = $request->input('selected_users', []);
+        foreach ($selectedUsers as $userId) {
+            $user = User::find($userId);
+            if ($user) {
+                $user->team_id = $team->id;
+                $user->save();
             }
         }
 
         return redirect()->route('teams')->with('success', 'Team created successfully, and you are assigned as the team leader!');
     }
+
 
     public function destroy($id)
     {
@@ -88,6 +82,7 @@ class TeamController extends Controller
     public function index()
     {
         $allTeams = Team::with('users')->get(); // Load teams with their associated users
-        return view('teams', compact('allTeams'));
+        $users = User::doesntHave('team')->get();
+        return view('teams', compact('allTeams', 'users'));
     }
 }
