@@ -1,16 +1,9 @@
 <x-app-layout>
-    <style>
-        .welcome-text {
-            font-size: 30px; /* 48px */
-            line-height: 1;
-        }
-    </style>
-
     <div>
         <div>
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1 class="welcome-text font-semibold">Selamat Datang, {{Auth::user()->name}}!</h1>
+                <div class="text-gray-900 dark:text-gray-100 pt-3">
+                    <h1 class="text-[32px] font-extrabold" style="text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);">Selamat Datang, {{Auth::user()->name}}!</h1>
                     <br>
                 </div>
             </div>

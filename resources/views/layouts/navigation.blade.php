@@ -4,11 +4,12 @@
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-        <div class="flex h-16 shrink-0 items-center">
-            <a href="{{route ('dashboard')}}">
-                <x-application-logo class="w-10 h-auto"/>
-            </a>
-        </div>
+            <div class="flex h-16 shrink-0 items-center space-x-2">
+                <a href="{{route ('dashboard')}}" class="flex items-center space-x-2">
+                    <x-application-logo class="w-10 h-auto"/>
+                    <span class="text-lg font-semibold text-gray-800">ProSync</span>
+                </a>
+            </div>
         <nav class="flex flex-1 flex-col">
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
             <li>
@@ -31,12 +32,12 @@
                     </x-nav-link>
                 </li>
                 <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                    <x-nav-link :href="route('testing')" :active="request()->routeIs('testing')" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
                     <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                     </svg>
                     Projects
-                    </a>
+                    </x-nav-link>
                 </li>
                 <li>
                     <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
@@ -67,27 +68,19 @@
             </li>
             <li>
                 <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-                <ul role="list" class="-mx-2 mt-2 space-y-1">
-                <li>
-                    <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">H</span>
-                    <span class="truncate">Heroicons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">T</span>
-                    <span class="truncate">Tailwind Labs</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">W</span>
-                    <span class="truncate">Workcation</span>
-                    </a>
-                </li>
-                </ul>
+                @foreach($userTeams as $team)
+                    @foreach($team->users as $user)
+                        <ul role="list" class="-mx-2 mt-2 space-y-1">
+                        <li>
+                            <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                            <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                            <img src="{{ $user->picture ? asset('pictures/' . $user->picture) : asset('img/person-fill.svg') }}" alt="{{ $user->name }}" class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white group-hover:border-indigo-600 ">
+                            <span class="truncate">{{ $user->name }}</span>
+                            </a>
+                        </li>
+                        </ul>
+                    @endforeach
+                @endforeach
             </li>
             <li class="-mx-6 mt-auto">
                 <x-dropdown align="left" width="48">
@@ -150,12 +143,6 @@
         @endif
         </a>
     </div>
-
-    <main class="py-10 lg:pl-72">
-        <div class="px-4 sm:px-6 lg:px-8">
-        <!-- Your content -->
-        </div>
-    </main>
     </div>
 </div>
 

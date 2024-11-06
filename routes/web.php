@@ -11,19 +11,32 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
+Route::get('/testing', function () {
+    return view('testing');
+})->middleware(['auth'])->name('testing');
 // Route to show the form for creating a new team
-Route::get('/teams/create', [TeamController::class, 'create'])->name('create_teams');
+Route::get('/teams/create', [TeamController::class, 'create'])
+->name('create_teams')
+->middleware('auth');
 
 // Route to handle the form submission and store the team with selected users
-Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
+Route::post('/teams', [TeamController::class, 'store'])
+->name('teams.store')
+->middleware('auth');
 
 // Optional: Route to view the list of teams if needed
-Route::get('/teams', [TeamController::class, 'index'])->name('teams');
+Route::get('/teams', [TeamController::class, 'index'])
+->name('teams')
+->middleware('auth');
+
+Route::delete('/teams/{id}', [TeamController::class, 'destroy'])
+->name('teams.destroy')
+->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
