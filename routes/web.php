@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ProjectController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,27 +17,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/testing', function () {
-    return view('testing');
-})->middleware(['auth'])->name('testing');
-// Route to show the form for creating a new team
-Route::get('/teams/create', [TeamController::class, 'create'])
-->name('create_teams')
-->middleware('auth');
-
-// Route to handle the form submission and store the team with selected users
-Route::post('/teams', [TeamController::class, 'store'])
-->name('teams.store')
-->middleware('auth');
-
-// Optional: Route to view the list of teams if needed
-Route::get('/teams', [TeamController::class, 'index'])
-->name('teams')
-->middleware('auth');
-
-Route::delete('/teams/{id}', [TeamController::class, 'destroy'])
-->name('teams.destroy')
-->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
+    Route::get('/teams', [TeamController::class, 'index'])->name('teams');
+    Route::delete('/teams/{id}', [TeamController::class, 'destroy'])->name('teams.destroy');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,11 +32,18 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects');
+});
+
 // Email Verification Handler
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('/home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
 
 // Resend Verification Email
 Route::post('/email/verification-notification', function (Request $request) {
