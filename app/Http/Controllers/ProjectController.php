@@ -60,4 +60,17 @@ class ProjectController extends Controller
 
         return view('projects', compact('projects'));
     }
+    public function destroy($id)
+    {
+        $project = Project::findOrFail($id);
+
+        // Optional: Only allow the team leader to delete the project
+        if (Auth::user()->id !== $project->team->leader_id) {
+            return redirect()->route('projects')->with('error', 'You do not have permission to delete this project.');
+        }
+
+        $project->delete();
+
+        return redirect()->route('projects')->with('success', 'Project deleted successfully!');
+    }
 }

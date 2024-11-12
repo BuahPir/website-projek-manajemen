@@ -57,15 +57,72 @@
         @if($projects->isEmpty())
             <p class="text-gray-600">No projects have been created for your team yet.</p>
         @else
-            <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                @foreach ($projects as $project)
-                    <div class="p-4 border border-gray-200 rounded-lg shadow-md">
-                        <h3 class="text-lg font-semibold">{{ $project->name }}</h3>
-                        <p class="text-gray-600">{{ $project->description }}</p>
+            @foreach ($projects as $project)
+                <div class="mb-6 px-4 bg-white rounded-lg shadow-md p-4">
+                    <!-- Project Name and Delete Button -->
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-gray-700 text-lg">{{ $project->name }}</span>
+
+                        <!-- Delete Project Form -->
+                        <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="delete-project-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500 hover:text-red-700 delete-project-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                </svg>
+                            </button>
+                        </form>
                     </div>
-                @endforeach
-            </div>
+                    <!-- Project Description (Optional) -->
+                    <p class="text-gray-600 mt-2">{{ $project->description }}</p>
+                </div>
+            @endforeach
         @endif
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-project-btn');
 
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    // Prevent the default button action
+                    event.preventDefault();
+
+                    Swal.fire({
+                        title: 'Apakah kamu serius?',
+                        text: "Kamu tidak akan bisa mengembalikannya lagi",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Hapus!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Submit the form only if the user confirms
+                            button.closest('.delete-project-form').submit();
+                        }
+                    });
+                });
+            });
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ session('success') }}',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+
+            // Display error message
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
 </x-app-layout>
