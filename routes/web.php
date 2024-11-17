@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/teams/{id}', [TeamController::class, 'destroy'])->name('teams.destroy');
 });
 
+// Project routes
+Route::resource('projects', ProjectController::class);
+
+// Nested task routes within a project
+Route::prefix('projects/{projectId}')->group(function () {
+    Route::get('tasks', [TaskController::class, 'index'])->name('projects.tasks.index');
+    Route::post('tasks/store', [TaskController::class, 'store'])->name('projects.tasks.store');
+    Route::get('tasks/{taskId}/edit', [TaskController::class, 'edit'])->name('projects.tasks.edit');
+    Route::put('tasks/{taskId}', [TaskController::class, 'update'])->name('projects.tasks.update');
+    Route::delete('tasks/{taskId}', [TaskController::class, 'destroy'])->name('projects.tasks.destroy');
+    Route::patch('tasks/{task}/update-status', [TaskController::class, 'updateStatus'])->name('projects.tasks.updateStatus');
+});
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -31,6 +47,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');

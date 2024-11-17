@@ -169,6 +169,7 @@
             </template>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.delete-team-btn');

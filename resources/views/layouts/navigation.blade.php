@@ -39,48 +39,28 @@
                     {{__('Projects')}}
                     </x-nav-link>
                 </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    Calendar
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                    </svg>
-                    Documents
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                    <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
-                    </svg>
-                    Reports
-                    </a>
-                </li>
                 </ul>
             </li>
             <li>
                 <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-                @foreach($userTeams as $team)
-                    @foreach($team->users as $user)
-                        <ul role="list" class="-mx-2 mt-2 space-y-1">
-                        <li>
-                            <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                            <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                            <img src="{{ $user->picture ? asset('pictures/' . $user->picture) : asset('img/person-fill.svg') }}" alt="{{ $user->name }}" class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white group-hover:border-indigo-600 ">
-                            <span class="truncate">{{ $user->name }}</span>
-                            </a>
-                        </li>
-                        </ul>
+                @if($userTeams->isEmpty())
+                    <!-- Message for no teams -->
+                    <p class="text-sm text-gray-500 mt-2">You don't have a team.</p>
+                @else
+                    @foreach($userTeams as $team)
+                            @foreach($team->users as $user)
+                                <ul role="list" class="-mx-2 mt-2 space-y-1">
+                                <li>
+                                    <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                                    <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                                    <img src="{{ $user->picture ? asset('pictures/' . $user->picture) : asset('img/person-fill.svg') }}" alt="{{ $user->name }}" class="flex h-6 w-6 shrink-0 items-center object-cover justify-center rounded-lg border border-gray-200 bg-white group-hover:border-indigo-600 ">
+                                    <span class="truncate">{{ $user->name }}</span>
+                                    </a>
+                                </li>
+                                </ul>
+                            @endforeach
                     @endforeach
-                @endforeach
+                @endif
             </li>
             <li class="-mx-6 mt-auto">
                 <x-dropdown align="left" width="48">
