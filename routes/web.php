@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskActivityController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,7 +36,12 @@ Route::prefix('projects/{projectId}')->group(function () {
     Route::put('tasks/{taskId}', [TaskController::class, 'update'])->name('projects.tasks.update');
     Route::delete('tasks/{taskId}', [TaskController::class, 'destroy'])->name('projects.tasks.destroy');
     Route::patch('tasks/{task}/update-status', [TaskController::class, 'updateStatus'])->name('projects.tasks.updateStatus');
+
+    // Pass taskId for activities
+    Route::post('tasks/{taskId}/storeActivity', [TaskActivityController::class, 'store'])->name('projects.tasks.activities.store');
+
 });
+
 
 
 

@@ -14,7 +14,7 @@ class TaskActivity extends Model
         'task_id',
         'activity_date',
         'file_path',
-        'comment',
+        'activity_name',
     ];
 
     /**

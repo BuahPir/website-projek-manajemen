@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('task_id')->constrained()->onDelete('cascade'); // Foreign key to tasks table
             $table->date('activity_date')->nullable(); // Date of the activity
             $table->string('file_path')->nullable(); // Path to the uploaded file (if any)
-            $table->text('comment')->nullable(); // Comment or description of the activity
+            $table->string('activity_name')->nullable(); // Comment or description of the activity
             $table->timestamps(); // Created at and updated at timestamps
         });
     }
