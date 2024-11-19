@@ -29,19 +29,21 @@ class TaskActivityController extends Controller
             'activity_name' => 'required|string|max:255',
             'activity_date' => 'required|date', // Ensures it's a valid date
             'file_path' => 'nullable|file',
+            'description' => 'nullable|string',
         ]);
 
         // Format the date to `Y-m-d`
         $formattedDate = \Carbon\Carbon::createFromFormat('m/d/Y', $request->input('activity_date'))->format('Y-m-d');
 
         // Handle file upload if exists
-        $filePath = $request->hasFile('file_path') ? $request->file('file_path')->storePublicly('','public') : null;
+        $filePath = $request->hasFile('file_path') ? $request->file('file_path')->storePublicly('task_file','public') : null;
 
         TaskActivity::create([
             'task_id' => $taskId,
             'activity_date' => $formattedDate, // Save in correct format
             'activity_name' => $request->input('activity_name'),
             'file_path' => $filePath,
+            'description' => $request->input('description'),
         ]);
 
         return redirect()->route('projects.tasks.index', $projectId)->with('success', 'Activity added successfully.');

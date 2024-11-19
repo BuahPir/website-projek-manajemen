@@ -115,6 +115,11 @@
                                                         </div>
 
                                                         <div>
+                                                            <x-input-label for="description" value="{{ __('Description') }}" />
+                                                            <textarea id="description" name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                                                        </div>
+
+                                                        <div>
                                                             <x-input-label for="activity_date" value="{{ __('Activity Date') }}" />
                                                             <div class="relative max-w-sm">
                                                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -162,6 +167,7 @@
                                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                                         Changelog
                                                     </h3>
+
                                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="timeline-modal">
                                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -184,6 +190,33 @@
                                                             </button>
                                                         </li>
                                                     </ol>
+                                                    @foreach ($task->comments as $comment)
+                                                        <div class="flex items-start gap-2.5">
+                                                            <img class="w-8 h-8 rounded-full" src="{{ $comment->user->picture ? asset('pictures/' . $comment->user->picture) : asset('img/person-fill.svg') }}" alt="Jese image">
+                                                            <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                                                            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{$comment->user->name}}</span>
+                                                                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{$comment->created_at->format('H:i')}}</span>
+                                                            </div>
+                                                            <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{{$comment->content}}</p>
+                                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                    @endforeach
+                                                    <form action="{{ route('projects.tasks.comments.store', ['projectId' => $project->id, 'taskId' => $task->id]) }}" method="POST">
+                                                        @csrf
+                                                        <label for="chat" class="sr-only">Your message</label>
+                                                        <div class="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+                                                            <textarea id="chat" name="content" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+                                                            <button type="submit" class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+                                                                <svg class="w-5 h-5 rotate-90 rtl:-rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                                                    <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z"/>
+                                                                </svg>
+                                                                <span class="sr-only">Send message</span>
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                     </div>
@@ -213,6 +246,7 @@
             @endif
         </ul>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.delete-team-btn');

@@ -15,6 +15,7 @@ class TaskActivity extends Model
         'activity_date',
         'file_path',
         'activity_name',
+        'description',
     ];
 
     /**
@@ -23,5 +24,10 @@ class TaskActivity extends Model
     public function task()
     {
         return $this->belongsTo(Task::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
