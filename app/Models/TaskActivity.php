@@ -16,8 +16,11 @@ class TaskActivity extends Model
         'file_path',
         'activity_name',
         'description',
+        'original_file_name'
     ];
-
+    protected $casts = [
+        'activity_date' => 'date',
+    ];
     /**
      * Get the task that owns the activity.
      */

@@ -20,6 +20,18 @@ class TaskActivityController extends Controller
     }
 
 
+    public function download($projectId, $taskId, $fileName)
+    {
+        $filePath = 'pictures/' . $fileName;
+
+        if (Storage::disk('public')->exists($filePath)) {
+            return response()->download(storage_path('app/public/pictures/' . $filePath), $fileName);
+        }
+
+        return abort(404, 'File not found.');
+    }
+
+
     /**
      * Store a newly created activity in the database.
      */
@@ -36,15 +48,29 @@ class TaskActivityController extends Controller
         $formattedDate = \Carbon\Carbon::createFromFormat('m/d/Y', $request->input('activity_date'))->format('Y-m-d');
 
         // Handle file upload if exists
-        $filePath = $request->hasFile('file_path') ? $request->file('file_path')->storePublicly('task_file','public') : null;
+        if ($request->hasFile('file_path')) {
+            $originalName = $request->file('file_path')->getClientOriginalName(); // Get the original file name
+            $generatedName = $request->file('file_path')->hashName(); // Generate a unique file name
+            $filePath = $request->file('file_path')->storeAs('', $generatedName, 'public'); // Save the file with a generated name
 
-        TaskActivity::create([
-            'task_id' => $taskId,
-            'activity_date' => $formattedDate, // Save in correct format
-            'activity_name' => $request->input('activity_name'),
-            'file_path' => $filePath,
-            'description' => $request->input('description'),
-        ]);
+            TaskActivity::create([
+                'task_id' => $taskId,
+                'activity_name' => $request->input('activity_name'),
+                'activity_date' => $request->input('activity_date') ?? now(),
+                'description' => $request->input('description'),
+                'file_path' => $filePath,
+                'original_file_name' => $originalName, // Save the original file name
+            ]);
+        } else {
+            TaskActivity::create([
+                'task_id' => $taskId,
+                'activity_name' => $request->input('activity_name'),
+                'activity_date' => $request->input('activity_date') ?? now(),
+                'description' => $request->input('description'),
+                'file_path' => null,
+                'original_file_name' => null,
+            ]);
+        }
 
         return redirect()->route('projects.tasks.index', $projectId)->with('success', 'Activity added successfully.');
     }

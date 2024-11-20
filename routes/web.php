@@ -39,6 +39,8 @@ Route::prefix('projects/{projectId}')->group(function () {
     Route::patch('tasks/{task}/update-status', [TaskController::class, 'updateStatus'])->name('projects.tasks.updateStatus');
     Route::post('tasks/{taskId}/storeActivity', [TaskActivityController::class, 'store'])->name('projects.tasks.activities.store');
     Route::post('tasks/{taskId}/addComment', [CommentController::class, 'store'])->name('projects.tasks.comments.store');
+    Route::get('tasks/{taskId}/download/{fileName}', [TaskActivityController::class, 'download'])->name('projects.tasks.file.download');
+
 });
 
 
