@@ -43,6 +43,10 @@ Route::prefix('projects/{projectId}')->group(function () {
 
 });
 
+Route::get('/notifications/mark-all-as-read', function () {
+    auth()->user()->unreadNotifications->markAsRead();
+    return redirect()->back();
+})->name('notifications.markAllAsRead');
 
 
 
