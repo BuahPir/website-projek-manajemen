@@ -85,4 +85,18 @@ class TeamController extends Controller
         $users = User::doesntHave('team')->get();
         return view('teams', compact('allTeams', 'users'));
     }
+    public function indexAdmin()
+    {
+        $teams = Team::with('leader', 'users')->get(); // Assuming leader and users relations exist
+        return view('admin.manage_teams', compact('teams'));
+    }
+    public function destroyAdmin($id)
+    {
+        $team = Team::findOrFail($id);
+
+        // Delete the team
+        $team->delete();
+
+        return redirect()->route('admin.teams.index')->with('success', 'Team deleted successfully!');
+    }
 }

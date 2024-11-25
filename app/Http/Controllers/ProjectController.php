@@ -73,4 +73,18 @@ class ProjectController extends Controller
 
         return redirect()->route('projects')->with('success', 'Project deleted successfully!');
     }
+    public function indexAdmin()
+    {
+        $projects = Project::with('team', 'team.leader')->get(); // Assuming 'team' and 'team.leader' relationships exist
+        return view('admin.manage_projects', compact('projects'));
+    }
+    public function destroyAdmin($id)
+    {
+        $project = Project::findOrFail($id);
+
+        // Optional: Only allow the team leader to delete the project
+        $project->delete();
+
+        return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully!');
+    }
 }

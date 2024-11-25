@@ -55,6 +55,14 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
+Route::prefix('admin')->group(function () {
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/teams', [TeamController::class, 'indexAdmin'])->name('admin.teams.index'); // Add middleware if needed
+    Route::delete('/teams/{id}', [TeamController::class, 'destroyAdmin'])->name('admin.teams.destroy');
+    Route::get('/projects', [ProjectController::class, 'indexAdmin'])->name('admin.projects.index');
+    Route::delete('/projects/{id}', [ProjectController::class, 'destroyAdmin'])->name('admin.projects.destroy'); // Add middleware if needed
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
