@@ -39,7 +39,7 @@
                     {{__('Projects')}}
                     </x-nav-link>
                 </li>
-                @if (Auth::user()->role === 'admin') {
+                @if (Auth::user()->role === 'admin')
                     <li>
                         <x-nav-link :href="route('admin.projects.index')" :active="request()->routeIs('admin.projects.index')" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
                         <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600 {{ Request::is('admin.projects.index') ? 'text-indigo-600' : 'text-gray-400'}}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -64,7 +64,6 @@
                         {{__('Manage Teams')}}
                         </x-nav-link>
                     </li>
-                }
                 @endif
                 </ul>
             </li>
