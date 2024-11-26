@@ -1,0 +1,44 @@
+{
+    "version": 2,
+    "framework": null,
+    "functions": {
+        "api/index.php": { "runtime": "vercel-php@0.6.0" }
+    },
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
+    "env": {
+        "APP_ENV": "production",
+        "APP_DEBUG": "true",
+        "APP_URL": "https://your.url.from.vercel.app",
+        "APP_KEY": "base64:TcGDdL1ClJM9TcLUwFvaCFHH9Y58YOWr1/7O/I4vkaw=",
+
+        "APP_CONFIG_CACHE": "/tmp/config.php",
+        "APP_EVENTS_CACHE": "/tmp/events.php",
+        "APP_PACKAGES_CACHE": "/tmp/packages.php",
+        "APP_ROUTES_CACHE": "/tmp/routes.php",
+        "APP_SERVICES_CACHE": "/tmp/services.php",
+        "VIEW_COMPILED_PATH": "/tmp",
+
+        "DB_CONNECTION": "mysql",
+        "DB_HOST":"7kcek.h.filess.io",
+        "DB_PORT":"3307",
+        "DB_DATABASE": "prosync_showlateup",
+        "DB_USERNAME": "prosync_showlateup",
+        "DB_PASSWORD": "e3d02b6560c2551dca567acd64e796f20f2cb4df",
+
+        "MAIL_FROM_NAME": "POPO",
+        "MAIL_MAILER": "smtp",
+        "MAIL_HOST": "smtp.gmail.com",
+        "MAIL_PORT": "465",
+        "MAIL_USERNAME":"andinadil90@gmail.com",
+        "MAIL_PASSWORD":"wpyo rjmc xkyf knbz",
+
+        "CACHE_DRIVER": "array",
+        "LOG_CHANNEL": "stderr",
+        "SESSION_DRIVER": "cookie"
+    }
+}
