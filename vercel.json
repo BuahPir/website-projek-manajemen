@@ -4,10 +4,6 @@
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.7.1" }
     },
-    "builds": [
-        { "src": "public/**", "use": "@vercel/static" },
-        { "src": "api/index.php", "use": "@vercel/php" }
-    ],
     "routes": [
         {
             "src": "/build/(.*)",
@@ -21,7 +17,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://website-projek-manajemen.vercel.app",
+        "APP_URL": "http://localhost",
         "APP_KEY": "base64:TcGDdL1ClJM9TcLUwFvaCFHH9Y58YOWr1/7O/I4vkaw=",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",
