@@ -4,10 +4,14 @@
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.7.1" }
     },
-    "routes": [
+"routes": [
         {
-            "src": "/build/(.*)",
-            "dest": "/build/$1"
+            "src": "/build(.*)",
+            "dest": "/public/assets/"
+        },
+        {
+            "src": "/favicon/(.*)",
+            "dest": "/public/favicon/"
         },
         {
             "src": "/(.*)",
