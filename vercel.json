@@ -4,7 +4,10 @@
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.7.1" }
     },
-
+    "builds": [
+        { "src": "public/**", "use": "@vercel/static" },
+        { "src": "api/index.php", "use": "@vercel/php" }
+    ],
     "routes": [
         {
             "src": "/build/(.*)",
