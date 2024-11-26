@@ -2,12 +2,12 @@
     "version": 2,
     "framework": null,
     "functions": {
-        "api/*.php": { "runtime": "vercel-php@0.7.1" }
+        "api/index.php": { "runtime": "vercel-php@0.7.1" }
     },
     "routes": [
         {
-            "src": "/(css|js)/(.*)$",
-            "dest": "/api/assets.php?type=$1&file=$2"
+            "src": "/build/(.*)",
+            "dest": "/build/$1"
         },
         {
             "src": "/(.*)",
