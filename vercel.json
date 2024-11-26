@@ -3,7 +3,7 @@
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.7.1" }
     },
-    "routes": [ { "src": "/build/(.*)", "dest": "/public/build/" }, { "src": "/resources/(.*)", "dest": "/public/resources/" }, { "src": "/favicon/(.*)", "dest": "/public/favicon/" }, { "src": "/(.*)", "dest": "/api/index.php" } ],
+    "routes": [ { "src": "/build/(.*)", "dest": "/public/build/" }, { "src": "/resources/(.*)", "dest": "/public/resources/" }, { "src": "/favicon/(.*)", "dest": "/public/favicon/" }, { "src": "/(.*)", "dest": "/api/index.php" }, { "src": "/pictures/(.*)", "dest": "/public/pictures/" } ],
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
