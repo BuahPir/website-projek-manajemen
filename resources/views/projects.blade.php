@@ -58,7 +58,7 @@
             <p class="text-gray-600">No projects have been created for your team yet.</p>
         @else
             @foreach ($projects as $project)
-                <div class="mb-6 px-4 bg-white rounded-lg shadow-md p-4">
+                <div class="mb-6 px-4 bg-gray-100 rounded-lg shadow-md p-4">
                     <!-- Project Name and Delete Button -->
                     <div class="flex items-center justify-between">
                         <a href="{{ route('projects.tasks.index', $project->id) }}" class="font-semibold text-gray-700 text-lg hover:text-indigo-600">

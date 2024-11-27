@@ -88,7 +88,7 @@
             @else
             <ul class="space-y-2">
                 @foreach ($project->tasks as $task)
-                    <li class="bg-white shadow-md p-4 rounded-md">
+                    <li class="bg-gray-100 shadow-md p-4 rounded-md">
                         <div class="flex justify-between items-center">
                             <div>
                                 <span class="font-semibold text-lg">{{ $task->name }}</span>
@@ -102,7 +102,9 @@
                                     {{ ucfirst($task->status) }}
                                 </span>
                                     @if ($task->status === 'process')
-                                        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="bg-indigo-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-indigo-600 translate-y-[0.01rem]" type="button">
+                                        <button data-modal-target="crud-modal-{{ $task->id }}"
+                                        data-modal-toggle="crud-modal-{{ $task->id }}"
+                                        class="bg-indigo-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-indigo-600 translate-y-[0.01rem]" type="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
                                                 <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0"/>
                                             </svg>
@@ -110,7 +112,7 @@
                                     @endif
 
                                     <!-- Main modal -->
-                                    <div id="crud-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+                                    <div id="crud-modal-{{ $task->id }}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
                                         <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
                                             <!-- Modal content -->
                                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -149,7 +151,7 @@
                                                                   </svg>
                                                                 </div>
                                                                 <input datepicker id="default-datepicker" id="activity_date" name="activity_date"type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
-                                                              </div>
+                                                            </div>
                                                         </div>
 
 
@@ -170,7 +172,11 @@
                                         </div>
                                     </div>
                                 <!-- Timeline toggle -->
-                                <button data-modal-target="timeline-modal" data-modal-toggle="timeline-modal" class="bg-indigo-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-indigo-600" type="button">
+                                <button
+                                    data-modal-target="timeline-modal-{{ $task->id }}"
+                                    data-modal-toggle="timeline-modal-{{ $task->id }}"
+                                    class="bg-indigo-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-indigo-600"
+                                    type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-arrow-up" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 11a.5.5 0 0 0 .5-.5V6.707l1.146 1.147a.5.5 0 0 0 .708-.708l-2-2a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L7.5 6.707V10.5a.5.5 0 0 0 .5.5"/>
                                         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
@@ -179,27 +185,29 @@
                                 </button>
 
                                 <!-- Main modal -->
-                                <div id="timeline-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-[calc(100%-1rem)] max-h-full">
+                                <div id="timeline-modal-{{ $task->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative p-4 w-full max-w-4xl max-h-full">
                                         <!-- Modal content -->
                                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                                <!-- Modal header -->
-                                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                        Changelog
-                                                    </h3>
-
-                                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="timeline-modal">
-                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                                        </svg>
-                                                        <span class="sr-only">Close modal</span>
-                                                    </button>
-                                                </div>
+                                            <!-- Modal header -->
+                                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                    Changelog for {{ $task->name }}
+                                                </h3>
+                                                <button
+                                                    type="button"
+                                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                    data-modal-toggle="timeline-modal-{{ $task->id }}">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                            </div>
                                                 <!-- Modal body -->
                                                 <div class="p-4 md:p-5">
                                                     <ol class="relative border-s border-gray-200 dark:border-gray-600 ms-3.5 mb-4 md:mb-5">
-                                                        @foreach ($task->activities as $activity)
+                                                        @foreach ($task->activities->where('task_id', $task->id) as $activity)
                                                             <li class="mb-10 ms-8">
                                                                 <!-- Timeline Circle -->
                                                                 <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
@@ -222,7 +230,7 @@
 
                                                                 <!-- Download Button -->
                                                                 @if($activity->file_path)
-                                                                    <a href="{{ route('projects.tasks.file.download', ['projectId' => $project->id, 'taskId' => $task->id, 'fileName' => $activity->file_path]) }}" download class="py-2 px-3 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                                    <a href="{{asset('/pictures/'.$activity->file_path)}}" download class="py-2 px-3 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                                         <svg class="w-3 h-3 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                                                             <path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/>
                                                                             <path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
@@ -234,7 +242,7 @@
                                                         @endforeach
                                                     </ol>
 
-                                                    <div class="max-h-28 overflow-y-auto scrollbar">
+                                                    <div class="max-h-20 overflow-y-auto scrollbar">
                                                         @foreach ($task->comments as $comment)
                                                             <div class="flex items-start gap-2.5">
                                                                 <img class="w-8 h-8 rounded-full" src="{{ $comment->user->picture ? asset('pictures/' . $comment->user->picture) : asset('img/person-fill.svg') }}" alt="{{ $comment->user->name }}">
@@ -294,6 +302,44 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalButtons = document.querySelectorAll('[data-modal-toggle]');
+
+            modalButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const modalId = button.getAttribute('data-modal-target');
+                    const modal = document.getElementById(modalId);
+
+                    // Show the modal
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+
+                    // Change the URL without reloading
+                    const newUrl = button.getAttribute('data-url');
+                    if (newUrl) {
+                        history.pushState(null, '', newUrl);
+                    }
+                });
+            });
+
+            // Handle modal close and revert URL
+            const closeButtons = document.querySelectorAll('[data-modal-toggle]');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const modalId = button.getAttribute('data-modal-target');
+                    const modal = document.getElementById(modalId);
+
+                    // Hide the modal
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+
+                    // Revert the URL to the original without reloading
+                    const originalUrl = window.location.pathname; // Adjust this if needed
+                    history.pushState(null, '', originalUrl);
+                });
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.delete-team-btn');
 

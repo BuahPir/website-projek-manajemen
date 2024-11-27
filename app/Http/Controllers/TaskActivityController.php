@@ -7,15 +7,17 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\TaskActivityAdded;
+use App\Models\Project;
 
 class TaskActivityController extends Controller
 {
     /**
      * Display a listing of the activities for a specific task.
      */
-    public function index($taskId)
+    public function index($projectId,$taskId)
     {
-        $task = Task::with('activities')->findOrFail($taskId);
+        $project = Project::with(['tasks.activities', 'team'])->findOrFail($projectId);
+        $task = $project->tasks->where('id', $taskId)->firstOrFail();
 
         return view('projects.tasks.index', compact('task'));
     }
@@ -46,6 +48,11 @@ class TaskActivityController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        // Validate project and task association
+        $task = Task::where('id', $taskId)->whereHas('project', function ($query) use ($projectId) {
+            $query->where('id', $projectId);
+        })->firstOrFail();
+
         $formattedDate = \Carbon\Carbon::createFromFormat('m/d/Y', $request->input('activity_date'))->format('Y-m-d');
 
         $filePath = null;
@@ -57,8 +64,7 @@ class TaskActivityController extends Controller
             $filePath = $request->file('file_path')->storeAs('', $generatedName, 'public');
         }
 
-        $activity = TaskActivity::create([
-            'task_id' => $taskId,
+        $activity = $task->activities()->create([
             'activity_name' => $request->input('activity_name'),
             'activity_date' => $formattedDate,
             'description' => $request->input('description'),
@@ -67,8 +73,7 @@ class TaskActivityController extends Controller
         ]);
 
         // Notify all team members
-        $task = Task::findOrFail($taskId);
-        $teamUsers = $task->project->team->users; // Assuming relationships are defined
+        $teamUsers = $task->project->team->users;
 
         foreach ($teamUsers as $user) {
             $user->notify(new TaskActivityAdded($activity));
@@ -76,6 +81,7 @@ class TaskActivityController extends Controller
 
         return redirect()->route('projects.tasks.index', $projectId)->with('success', 'Activity added successfully and users notified.');
     }
+
 
     /**
      * Show the form for editing the specified activity.

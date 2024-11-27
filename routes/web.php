@@ -10,15 +10,13 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskActivityController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Middleware\RoleMiddleware;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
@@ -30,7 +28,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('projects', ProjectController::class);
 
 // Nested task routes within a project
-Route::prefix('projects/{projectId}')->group(function () {
+Route::prefix('projects/{projectId}')->middleware('auth')->group(function () {
     Route::get('tasks', [TaskController::class, 'index'])->name('projects.tasks.index');
     Route::post('tasks/store', [TaskController::class, 'store'])->name('projects.tasks.store');
     Route::get('tasks/{taskId}/edit', [TaskController::class, 'edit'])->name('projects.tasks.edit');
@@ -59,7 +57,7 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['auth','adminMiddleware' => \App\Http\Middleware\RoleMiddleware::class])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/teams', [TeamController::class, 'indexAdmin'])->name('admin.teams.index'); // Add middleware if needed
@@ -87,5 +85,9 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/coba', function () {
+    return view('coba');
+});
 
 require __DIR__.'/auth.php';
